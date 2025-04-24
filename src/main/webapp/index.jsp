@@ -23,6 +23,7 @@
 <!-- Table output -->
 <%
     List<String[]> sevUsers = (List<String[]>) request.getAttribute("sevUsers");
+    List<String> docFlowSevUsers = (List<String>) request.getAttribute("docFlowSevUsers");
     if (sevUsers != null && !sevUsers.isEmpty()) {
 %>
     <table>
@@ -32,6 +33,7 @@
             <th>Скорочене найменування</th>
             <th>Повне найменування</th>
             <th>Припинено</th>
+            <th>Підключено до АС ДокПроф</th>
         </tr>
         <%
             int i = 1;
@@ -44,6 +46,19 @@
                 <td><%= row[2] %></td>
                 <td><%= row[3] %></td>
             </tr>
+        <% } %>
+    </table>
+
+    <table>
+        <tr>
+            <th>ЄДРПОУ</th>
+        </tr>
+        <tr>
+        <%
+            for(String str: docFlowSevUsers) {
+        %>
+            <td><%= str %></td>
+        </tr>
         <% } %>
     </table>
 <%

@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 
-public class UserDownloader {
+public class ExcelDownloader {
     private static final String fileURL = "https://se.diia.gov.ua/uploads/documents/45.xlsx";
 
     public static File downloadFile() throws IOException {
