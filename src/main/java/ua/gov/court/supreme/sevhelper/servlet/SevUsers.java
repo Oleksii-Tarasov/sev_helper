@@ -13,6 +13,7 @@ import java.util.List;
 
 @WebServlet("/downloadUsers")
 public class SevUsers extends HttpServlet {
+    private final SevInspector sevInspector = new SevInspector();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,7 +28,7 @@ public class SevUsers extends HttpServlet {
         try {
 //            List<String[]> sevUsers = ExcelParser.parseExcel(ExcelDownloader.downloadFile());
             List<String[]> sevUsers = ExcelParser.parseExcel();
-            List<String> docFlowSevUsers = SevInspector.getDocFlowSevUsers();
+            List<String> docFlowSevUsers = sevInspector.getDocFlowSevUsers();
 
             req.setAttribute("sevUsers", sevUsers);
             req.setAttribute("docFlowSevUsers", docFlowSevUsers);
