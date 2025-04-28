@@ -28,10 +28,11 @@ public class SevUsers extends HttpServlet {
         try {
 //            List<String[]> sevUsers = ExcelParser.parseExcel(ExcelDownloader.downloadFile());
             List<String[]> sevUsers = ExcelParser.parseExcel();
-            List<String> docFlowSevUsers = sevInspector.getDocFlowSevUsers();
+
+            sevInspector.grabUserData();
 
             req.setAttribute("sevUsers", sevUsers);
-            req.setAttribute("docFlowSevUsers", docFlowSevUsers);
+//            req.setAttribute("docFlowSevUsers", docFlowSevUsers);
         } catch (Exception e) {
             req.setAttribute("error", "Can`t find users " + e.getMessage());
         }

@@ -1,0 +1,105 @@
+package ua.gov.court.supreme.sevhelper.service.db;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SevUsersRepository {
+    private final DatabaseConnector postgresConnector;
+    private final DatabaseConnector oracleConnector;
+
+    public SevUsersRepository() {
+        this.postgresConnector = new PostgresConnector();
+        this.oracleConnector = new OracleConnector();
+    }
+
+    public void saveSevUsersToDB(List<String[]> sevUsers) {
+        String query = """
+                INSERT INTO SEV_USERS (edrpou, short_name, full_name, is_terminated) 
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT (edrpou) DO UPDATE 
+                SET short_name = EXCLUDED.short_name, 
+                    full_name = EXCLUDED.full_name, 
+                    is_terminated = EXCLUDED.is_terminated
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            for (String[] user : sevUsers) {
+                statement.setString(1, user[0]); // edrpou
+                statement.setString(2, user[1]); // short_name
+                statement.setString(3, user[2]); // full_name
+                statement.setString(4, user[3]); // is_terminated
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Помилка при збереженні користувачів СЕВ", e);
+        }
+    }
+
+    // DocFlow EDRPOU
+    public void saveDocFlowUsersToDB() {
+        List<String> docFlowUsers = getDocFlowSevUsers();
+        String query = """
+                INSERT INTO docflow_users (edrpou) 
+                VALUES (?)
+                ON CONFLICT (edrpou) DO NOTHING
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            for (String edrpou : docFlowUsers) {
+                statement.setString(1, edrpou);
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Помилка при збереженні користувачів DocFlow", e);
+        }
+    }
+
+    private List<String> getDocFlowSevUsers() {
+        List<String> docFlowSevUsers = new ArrayList<>();
+//        CODOKPO - ЄДРПОУ;
+//        ID105_UNIT = 'dblink://' - Тип взаємодії "Посилання";
+//        USE_MULTY_OUT_UNIT = 0 - Використовувати загальні налаштування;
+//        DOC_MSG_OUT = 3 - Ознака відправлення електронних додатків;
+        String query = """
+                SELECT DISTINCT t.CODOKPO
+                FROM DOCFLOW_VS.TUNIT t
+                INNER JOIN DOCFLOW_VS.TMESSAGE_POST mp ON t.IDUNIT = mp.IDUNIT_MSG
+                WHERE t.CODOKPO IS NOT NULL
+                AND t.ID105_UNIT = 'dblink://'
+                AND t.USE_MULTY_OUT_UNIT = 0
+                AND mp.DOC_MSG_OUT = 3
+                """;
+
+        try (Connection connection = oracleConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                docFlowSevUsers.add(resultSet.getString("CODOKPO"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при отриманні користувачів DocFlow", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return docFlowSevUsers;
+    }
+}
