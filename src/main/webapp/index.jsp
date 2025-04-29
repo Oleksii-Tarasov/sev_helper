@@ -1,7 +1,9 @@
 <%@ page import="java.util.List" %>
+<%@ page import="ua.gov.court.supreme.sevhelper.service.model.SevUser" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <title>sevhelper</title>
 </head>
 <body>
@@ -22,11 +24,10 @@
 
 <!-- Table output -->
 <%
-    List<String[]> sevUsers = (List<String[]>) request.getAttribute("sevUsers");
-    List<String> docFlowSevUsers = (List<String>) request.getAttribute("docFlowSevUsers");
+    List<SevUser> sevUsers = (List<SevUser>) request.getAttribute("sevUsers");
     if (sevUsers != null && !sevUsers.isEmpty()) {
 %>
-    <table>
+    <table class="table table-striped-columns">
         <tr>
             <th>№</th>
             <th>ЄДРПОУ</th>
@@ -37,33 +38,23 @@
         </tr>
         <%
             int i = 1;
-            for (String[] row: sevUsers) {
+            for (SevUser user: sevUsers) {
         %>
             <tr>
                 <td><%= i++ %></td>
-                <td><%= row[0] %></td>
-                <td><%= row[1] %></td>
-                <td><%= row[2] %></td>
-                <td><%= row[3] %></td>
+                <td><%= user.getEdrpou() %></td>
+                <td><%= user.getShortName() %></td>
+                <td><%= user.getFullName() %></td>
+                <td><%= user.getIsTerminated() %></td>
+                <td><%= user.isConnected()? "Так" : "Ні" %></td>
             </tr>
-        <% } %>
-    </table>
-
-    <table>
-        <tr>
-            <th>ЄДРПОУ</th>
-        </tr>
-        <tr>
-        <%
-            for(String str: docFlowSevUsers) {
-        %>
-            <td><%= str %></td>
-        </tr>
         <% } %>
     </table>
 <%
     }
 %>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
 </body>
 </html>

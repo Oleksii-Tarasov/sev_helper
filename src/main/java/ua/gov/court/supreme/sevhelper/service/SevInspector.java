@@ -1,6 +1,7 @@
 package ua.gov.court.supreme.sevhelper.service;
 
 import ua.gov.court.supreme.sevhelper.service.db.SevUsersRepository;
+import ua.gov.court.supreme.sevhelper.service.model.SevUser;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,5 +18,10 @@ public class SevInspector {
         List<String[]> SevUsers = ExcelParser.parseExcel();
         sevUsersRepository.saveSevUsersToDB(SevUsers);
         sevUsersRepository.saveDocFlowUsersToDB();
+        sevUsersRepository.markUsersConnectedToSev();
+    }
+
+    public List<SevUser> getUserData() {
+        return sevUsersRepository.getAllData();
     }
 }

@@ -2,6 +2,7 @@ package ua.gov.court.supreme.sevhelper.servlet;
 
 import ua.gov.court.supreme.sevhelper.service.ExcelParser;
 import ua.gov.court.supreme.sevhelper.service.SevInspector;
+import ua.gov.court.supreme.sevhelper.service.model.SevUser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,12 +28,9 @@ public class SevUsers extends HttpServlet {
 
         try {
 //            List<String[]> sevUsers = ExcelParser.parseExcel(ExcelDownloader.downloadFile());
-            List<String[]> sevUsers = ExcelParser.parseExcel();
-
             sevInspector.grabUserData();
-
+            List<SevUser> sevUsers = sevInspector.getUserData();
             req.setAttribute("sevUsers", sevUsers);
-//            req.setAttribute("docFlowSevUsers", docFlowSevUsers);
         } catch (Exception e) {
             req.setAttribute("error", "Can`t find users " + e.getMessage());
         }

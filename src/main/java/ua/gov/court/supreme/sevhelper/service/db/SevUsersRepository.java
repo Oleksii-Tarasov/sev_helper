@@ -1,5 +1,8 @@
 package ua.gov.court.supreme.sevhelper.service.db;
 
+import oracle.jdbc.proxy.annotation.Pre;
+import ua.gov.court.supreme.sevhelper.service.model.SevUser;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,5 +104,51 @@ public class SevUsersRepository {
         }
 
         return docFlowSevUsers;
+    }
+
+    public void markUsersConnectedToSev() {
+        String query = """
+                UPDATE sev_users su
+                SET is_connected = EXISTS (
+                    SELECT 1
+                    FROM docflow_users du
+                    WHERE du.edrpou = su.edrpou
+                    )
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Помилка при оновленні статусу підключення користувачів до СЕВ");
+        }
+    }
+
+    public List<SevUser> getAllData() {
+        String query = "SELECT * FROM sev_users";
+        List<SevUser> sevUsers = new ArrayList<>();
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                sevUsers.add(new SevUser(
+                        resultSet.getLong("id"),
+                        resultSet.getString("edrpou"),
+                        resultSet.getString("short_name"),
+                        resultSet.getString("full_name"),
+                        resultSet.getString("is_terminated"),
+                        resultSet.getBoolean("is_connected")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Помилка при отриманні даних користувачів СЕВ");
+        }
+
+        return sevUsers;
     }
 }
