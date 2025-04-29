@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ExcelParser {
@@ -23,8 +24,16 @@ public class ExcelParser {
              Workbook workbook = new XSSFWorkbook(fileInputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
 
-            for (Row row: sheet) {
+            // Пропускаємо перший рядок з заголовками
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            // Обробляємо тільки існуючі рядки
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
                 String column1 = getCellValue(row.getCell(0));
                 String column2 = getCellValue(row.getCell(1));
                 String column3 = getCellValue(row.getCell(2));
