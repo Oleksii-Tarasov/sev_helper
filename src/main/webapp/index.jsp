@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-<%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">--%>
+    <%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         <%@include file="/css/page.css"%>
@@ -13,11 +13,13 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary py-0">
     <div class="container-fluid">
+<%--        <div class="container-sm">--%>
         <a class="navbar-brand" href="#">
             <img src="${pageContext.request.contextPath}/img/logo.jpg" alt="Logo" width="50" height="50"
                  class="d-inline-block align-text-middle">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -30,7 +32,8 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Довідка</a></li>
                         <li>
-                            <form method="post" action="${pageContext.request.contextPath}/downloadUsers" style="margin: 0;">
+                            <form method="post" action="${pageContext.request.contextPath}/upd-users"
+                                  style="margin: 0;">
                                 <button type="submit" class="dropdown-item">Примусове оновлення</button>
                             </form>
                         </li>
@@ -42,9 +45,6 @@
 
 
         <h6>Станом на: 25.02.1995</h6>
-<%--        <form class="d-flex" method="post" action="${pageContext.request.contextPath}/downloadUsers">--%>
-<%--            <button type="submit" class="btn btn-outline-success">Примусове оновлення</button>--%>
-<%--        </form>--%>
         <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Назва організації/ЄДРПОУ" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Пошук</button>
@@ -102,17 +102,6 @@
 <%
     }
 %>
-
-<%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"--%>
-<%--        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"--%>
-<%--        crossorigin="anonymous"></script>--%>
-<%--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"--%>
-<%--        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"--%>
-<%--        crossorigin="anonymous"></script>--%>
-<%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"--%>
-<%--        integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+"--%>
-<%--        crossorigin="anonymous"></script>--%>
-<%--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>--%>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
