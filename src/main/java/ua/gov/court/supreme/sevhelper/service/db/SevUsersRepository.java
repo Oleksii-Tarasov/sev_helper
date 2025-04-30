@@ -127,7 +127,7 @@ public class SevUsersRepository {
     }
 
     public List<SevUser> getAllData() {
-        String query = "SELECT * FROM sev_users";
+        String query = "SELECT * FROM sev_users ORDER BY edrpou";
         List<SevUser> sevUsers = new ArrayList<>();
 
         try (Connection connection = postgresConnector.getConnection();

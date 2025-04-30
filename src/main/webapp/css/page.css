@@ -48,6 +48,61 @@
     text-align: center;
 }
 
+.navbar {
+    background-color: #00264d !important;
+}
+
+.navbar h6 {
+    color: white !important;
+    margin: 0 !important;
+    display: flex !important; /* для вертикального центрування */
+    align-items: center !important; /* вертикальне центрування */
+    height: 100% !important;
+    padding: 0 15px !important; /* додаємо горизонтальні відступи */
+}
+
+.navbar-brand {
+    color: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.navbar-brand img {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.container-fluid {
+    padding-left: 1px !important;
+    /*margin: 5px !important;*/
+}
+
+.navbar .d-flex {
+    align-items: center;
+    padding: 5px !important;
+    margin: 5px !important;
+}
+
+.navbar .form-control {
+    min-width: 300px;
+    width: 25vw; /* займає 25% ширини вікна */
+}
+
+.navbar .form-control:focus {
+    border-color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+.navbar .btn {
+    color: white !important;
+    border-color: white !important;
+}
+
+.navbar .btn:hover {
+    color: white !important;
+    background-color: #1274da !important;
+}
+
 .table > tbody > tr.connected-row {
     --bs-table-bg: #90EE90 !important;
     --bs-table-striped-bg: #90EE90 !important;
@@ -60,4 +115,30 @@
     --bs-table-striped-bg: #FFB6C1 !important;
     --bs-table-active-bg: #FFB6C1 !important;
     --bs-table-hover-bg: #FFB6C1 !important;
+}
+
+/*Випадаюче меню*/
+
+.nav-link {
+    color: white !important;
+}
+
+.dropdown-menu {
+    background-color: #00264d !important;
+}
+
+.dropdown-item {
+    color: white !important;
+}
+
+.dropdown-item:hover {
+    background-color: #1274da !important;
+}
+
+.navbar-toggler {
+    border-color: white !important;
+}
+
+.nav-item .dropdown-toggle {
+    font-size: 1.25rem !important;
 }
