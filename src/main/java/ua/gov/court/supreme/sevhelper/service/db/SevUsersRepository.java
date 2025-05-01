@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class SevUsersRepository {
                 """;
 
         try (Connection connection = postgresConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -150,5 +151,44 @@ public class SevUsersRepository {
         }
 
         return sevUsers;
+    }
+
+    public void updateTimestamp() {
+        String query = "INSERT INTO update_timestamps (last_update) VALUES (CURRENT_TIMESTAMP)";
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)){
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Не вдалося оновити timestamp", e);
+        }
+    }
+
+    public LocalDateTime getLastUpdateTimestamp() {
+        String query = "SELECT last_update FROM update_timestamps ORDER BY last_update DESC LIMIT 1";
+
+        try (Connection connection = postgresConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getTimestamp("last_update").toLocalDateTime();
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void dropData() {
+        String query = "TRUNCATE TABLE sev_users, docflow_users";
+
+        try (Connection connection = postgresConnector.getConnection()) {
+            connection.prepareStatement(query).execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Помилка при знищенні даних", e);
+        }
     }
 }

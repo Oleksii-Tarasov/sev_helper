@@ -11,10 +11,10 @@
     <title>Довідник СЕВ ОВВ</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary py-0">
-    <div class="container-fluid">
-<%--        <div class="container-sm">--%>
-        <a class="navbar-brand" href="#">
+<nav class="navbar navbar-expand-lg bg-body-tertiary py-0 fixed-top">
+<%--    <div class="container-fluid">--%>
+                <div class="container-sm">
+                    <a class="navbar-brand" href="#">
             <img src="${pageContext.request.contextPath}/img/logo.jpg" alt="Logo" width="50" height="50"
                  class="d-inline-block align-text-middle">
         </a>
@@ -44,7 +44,7 @@
         </div>
 
 
-        <h6>Станом на: 25.02.1995</h6>
+        <h6>Станом на: <%= request.getAttribute("lastUpdate") %></h6>
         <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Назва організації/ЄДРПОУ" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Пошук</button>
@@ -68,36 +68,38 @@
     List<SevUser> sevUsers = (List<SevUser>) request.getAttribute("sevUsers");
     if (sevUsers != null && !sevUsers.isEmpty()) {
 %>
-<div class="container-sm">
-    <table class="table table-striped-columns">
-        <tr>
-            <th>№</th>
-            <th>ЄДРПОУ</th>
-            <th>Скорочене найменування</th>
-            <th>Повне найменування</th>
-            <th>Припинено</th>
-            <th>Підключено до АС ДокПроф</th>
-        </tr>
-        <%
-            int i = 1;
-            for (SevUser user : sevUsers) {
-        %>
-        <tr>
-            <td><%= i++ %>
-            </td>
-            <td><%= user.getEdrpou() %>
-            </td>
-            <td><%= user.getShortName() %>
-            </td>
-            <td><%= user.getFullName() %>
-            </td>
-            <td><%= user.getIsTerminated() %>
-            </td>
-            <td><%= user.isConnected() ? "Так" : "Ні" %>
-            </td>
-        </tr>
-        <% } %>
-    </table>
+<div class="container-sm mt-4">
+    <div class="bg-white p-4 rounded shadow">
+        <table class="table table-striped-columns">
+            <tr>
+                <th>№</th>
+                <th>ЄДРПОУ</th>
+                <th>Скорочене найменування</th>
+                <th>Повне найменування</th>
+                <th>Припинено</th>
+                <th>Підключено до АС ДокПроф</th>
+            </tr>
+            <%
+                int i = 1;
+                for (SevUser user : sevUsers) {
+            %>
+            <tr>
+                <td><%= i++ %>
+                </td>
+                <td><%= user.getEdrpou() %>
+                </td>
+                <td><%= user.getShortName() %>
+                </td>
+                <td><%= user.getFullName() %>
+                </td>
+                <td><%= user.getIsTerminated() %>
+                </td>
+                <td><%= user.isConnected() ? "Так" : "Ні" %>
+                </td>
+            </tr>
+            <% } %>
+        </table>
+    </div>
 </div>
 <%
     }
