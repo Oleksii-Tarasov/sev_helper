@@ -1,8 +1,7 @@
 package ua.gov.court.supreme.sevhelper.servlet;
 
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-import ua.gov.court.supreme.sevhelper.scheduler.DataGrabJob;
+import org.quartz.SchedulerException;
+import ua.gov.court.supreme.sevhelper.service.SchedulerManager;
 import ua.gov.court.supreme.sevhelper.service.SevInspector;
 
 import javax.servlet.ServletContext;
@@ -12,7 +11,7 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
-    private Scheduler scheduler;
+    private SchedulerManager schedulerManager;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -22,15 +21,9 @@ public class AppContextListener implements ServletContextListener {
         servletContext.setAttribute("sevInspector", sevInspector);
 
         try {
-            scheduler = StdSchedulerFactory.getDefaultScheduler();
-            JobDetail updateDataJob = JobBuilder.newJob(DataGrabJob.class).withIdentity("dataGrabJob", "group1").build();
-            Trigger dailyTrigger = TriggerBuilder.newTrigger().withIdentity("dataGrabTrigger")
-                    .withIdentity("dailyTrigger", "group1")
-                    .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(11, 7))
-                    .build();
-
-            scheduler.scheduleJob(updateDataJob, dailyTrigger);
-            scheduler.start();
+            schedulerManager = new SchedulerManager();
+//            schedulerManager.startDailyDataGrabScheduler(12, 57, sevInspector);
+            schedulerManager.startDailyDataGrabScheduler(sevInspector);
         } catch (Exception e) {
             System.err.println("Помилка при ініціалізації планувальника: " + e.getMessage());
         }
@@ -39,8 +32,8 @@ public class AppContextListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         try {
-            if (scheduler != null) {
-                scheduler.shutdown();
+            if (schedulerManager != null) {
+                schedulerManager.stopDailyDataGrabScheduler();
             }
         } catch (SchedulerException e) {
             System.err.println("Помилка при зупинці планувальника: " + e.getMessage());

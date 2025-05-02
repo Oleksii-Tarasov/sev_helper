@@ -1,4 +1,4 @@
-package ua.gov.court.supreme.sevhelper.service.db;
+package ua.gov.court.supreme.sevhelper.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;

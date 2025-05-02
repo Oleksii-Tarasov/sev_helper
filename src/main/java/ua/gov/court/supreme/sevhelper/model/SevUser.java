@@ -1,4 +1,4 @@
-package ua.gov.court.supreme.sevhelper.service.model;
+package ua.gov.court.supreme.sevhelper.model;
 
 public class SevUser {
     private long id;

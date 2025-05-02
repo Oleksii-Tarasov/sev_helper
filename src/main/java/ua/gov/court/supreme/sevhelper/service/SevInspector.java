@@ -1,7 +1,7 @@
 package ua.gov.court.supreme.sevhelper.service;
 
-import ua.gov.court.supreme.sevhelper.service.db.SevUsersRepository;
-import ua.gov.court.supreme.sevhelper.service.model.SevUser;
+import ua.gov.court.supreme.sevhelper.db.SevUsersRepository;
+import ua.gov.court.supreme.sevhelper.model.SevUser;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

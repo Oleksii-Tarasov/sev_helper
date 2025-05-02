@@ -1,7 +1,6 @@
-package ua.gov.court.supreme.sevhelper.service.db;
+package ua.gov.court.supreme.sevhelper.db;
 
-import oracle.jdbc.proxy.annotation.Pre;
-import ua.gov.court.supreme.sevhelper.service.model.SevUser;
+import ua.gov.court.supreme.sevhelper.model.SevUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

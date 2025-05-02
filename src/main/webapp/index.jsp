@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="ua.gov.court.supreme.sevhelper.service.model.SevUser" %>
+<%@ page import="ua.gov.court.supreme.sevhelper.model.SevUser" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -122,6 +122,25 @@
             }
         });
     });
+</script>
+<script>
+    // WebSocket з'єднання
+    const ws = new WebSocket('ws://' + window.location.host + '${pageContext.request.contextPath}/websocket/dbupdate');
+
+    ws.onmessage = function(event) {
+        if (event.data === 'reload') {
+            console.log('Отримано сигнал про оновлення даних');
+            location.reload();
+        }
+    };
+
+    ws.onclose = function() {
+        // Спроба переконектитись через 5 секунд
+        setTimeout(function() {
+            console.log('WebSocket відєднався. Спроба переконектитись...');
+            location.reload();
+        }, 5000);
+    };
 </script>
 </body>
 </html>
