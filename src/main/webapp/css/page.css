@@ -121,6 +121,22 @@ body {
     --bs-table-hover-bg: #FFB6C1 !important;
 }
 
+.table > tbody > tr.search-match {
+    --bs-table-bg: #FFFF00 !important;
+    --bs-table-striped-bg: #FFFF00 !important;
+    --bs-table-active-bg: #FFFF00 !important;
+    --bs-table-hover-bg: #FFFF00 !important;
+}
+
+.cell-match {
+    background-color: #FFFF00 !important;
+}
+
+.cell-match-active {
+    background-color: #FFFF00 !important; /* колір для активного співпадіння */
+    outline: 2px solid #FFA500 !important; /* Додаткове виділення контуром */
+}
+
 /*Випадаюче меню*/
 
 .nav-link {
