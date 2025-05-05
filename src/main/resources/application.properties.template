@@ -7,3 +7,12 @@ db.password=password
 postgres.db.url=jdbc:postgresql://localhost:5432/sev_helper
 postgres.db.user=sev_user
 postgres.db.password=sev_pass
+
+# Database update schedule
+#0 - секунди
+#15 - хвилини
+#7,13 - години
+#* - кожного дня місяця
+#* - кожного місяця
+#? - будь-який день тижня
+scheduler.cron.expression=0 15 7,13 * * ?

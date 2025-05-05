@@ -22,7 +22,6 @@ public class AppContextListener implements ServletContextListener {
 
         try {
             schedulerManager = new SchedulerManager();
-//            schedulerManager.startDailyDataGrabScheduler(12, 57, sevInspector);
             schedulerManager.startDailyDataGrabScheduler(sevInspector);
         } catch (Exception e) {
             System.err.println("Помилка при ініціалізації планувальника: " + e.getMessage());
