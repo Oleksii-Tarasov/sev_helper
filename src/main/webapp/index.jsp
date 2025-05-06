@@ -72,11 +72,11 @@
         <table class="table table-striped-columns">
             <tr>
                 <th>№</th>
-                <th>ЄДРПОУ</th>
-                <th>Скорочене найменування</th>
-                <th>Повне найменування</th>
-                <th>Припинено</th>
-                <th>Підключено до АС ДокПроф</th>
+                <th data-sortable="true">ЄДРПОУ</th>
+                <th data-sortable="true">Скорочене найменування</th>
+                <th data-sortable="true">Повне найменування</th>
+                <th data-sortable="true">Припинено</th>
+                <th data-sortable="true">Підключено до АС ДокПроф</th>
             </tr>
             <%
                 int i = 1;
@@ -140,7 +140,7 @@
         }, 5000);
     };
 </script>
-<%--Пошук на сторінці--%>
+<%--Пошук--%>
 <script>
     $(document).ready(function () {
         const searchInput = $('#searchInput');
@@ -265,6 +265,59 @@
                 }, wait);
             };
         }
+    });
+</script>
+<%--Сортування--%>
+<script>
+    $(document).ready(function() {
+        // Додаємо курсор-поінтер до заголовків колонок, що сортуються
+        $('th[data-sortable="true"]').css('cursor', 'pointer');
+
+        // Обробка кліку по заголовку
+        $('th[data-sortable="true"]').click(function() {
+            const table = $(this).parents('table').eq(0);
+            const rows = table.find('tr:gt(0)').toArray();
+            const column = $(this).index();
+            const ascending = $(this).hasClass('asc');
+
+            // Прибираємо клас сортування з інших колонок
+            $(this).siblings('th').removeClass('asc desc');
+            $(this).toggleClass('asc desc');
+
+            // Сортування рядків
+            rows.sort(function(a, b) {
+                const A = $(a).find('td').eq(column).text().trim();
+                const B = $(b).find('td').eq(column).text().trim();
+
+                // Спеціальна логіка для колонок з "Так"/"Ні"
+                if (A === 'Так' && B === 'Ні') return ascending ? 1 : -1;
+                if (A === 'Ні' && B === 'Так') return ascending ? -1 : 1;
+
+                // Перевірка на число (для ЄДРПОУ)
+                if (!isNaN(A) && !isNaN(B)) {
+                    return ascending ?
+                        parseInt(A) - parseInt(B) :
+                        parseInt(B) - parseInt(A);
+                }
+
+                // Звичайне текстове порівняння
+                return ascending ?
+                    A.localeCompare(B, 'uk') :
+                    B.localeCompare(A, 'uk');
+            });
+
+            // Видаляємо всі рядки крім заголовка і додаємо відсортовані
+            table.find('tr:gt(0)').remove();
+            table.append(rows);
+
+            // Оновлюємо нумерацію в першій колонці
+            table.find('tr:gt(0)').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+
+            // Відновлюємо кольори рядків
+            applyRowColors();
+        });
     });
 </script>
 </body>
