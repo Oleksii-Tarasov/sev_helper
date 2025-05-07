@@ -52,6 +52,8 @@ body {
     text-align: center;
 }
 
+/*Header*/
+
 .navbar {
     background-color: #00264d !important;
 }
@@ -107,6 +109,8 @@ body {
     background-color: #1274da !important;
 }
 
+/*Row color*/
+
 .table > tbody > tr.connected-row {
     --bs-table-bg: #90EE90 !important;
     --bs-table-striped-bg: #90EE90 !important;
@@ -137,7 +141,7 @@ body {
     outline: 2px solid #FFA500 !important; /* Додаткове виділення контуром */
 }
 
-/*Випадаюче меню*/
+/*Drop-down menu*/
 
 .nav-link {
     color: white !important;

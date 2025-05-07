@@ -8,20 +8,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class SevInspector {
+    private final ExcelDownloader excelDownloader;
     private final SevUsersRepository sevUsersRepository;
+    private final UpdateTimeChecker updateTimeChecker;
 
     public SevInspector() {
         this.sevUsersRepository = new SevUsersRepository();
+        this.updateTimeChecker = new UpdateTimeChecker();
+        this.excelDownloader = new ExcelDownloader();
     }
 
     public void grabUserData() throws IOException {
-        //            List<String[]> sevUsers = ExcelParser.parseExcel(ExcelDownloader.downloadFile());
-        List<String[]> SevUsers = ExcelParser.parseExcel();
+        List<String[]> sevUsers = ExcelParser.parseExcel(excelDownloader.downloadFile());
         sevUsersRepository.dropData();
-        sevUsersRepository.saveSevUsersToDB(SevUsers);
+        sevUsersRepository.saveSevUsersToDB(sevUsers);
         sevUsersRepository.saveDocFlowUsersToDB();
         sevUsersRepository.markUsersConnectedToSev();
         sevUsersRepository.updateTimestamp();
+        updateTimeChecker.updateLastUpdateTime();
     }
 
     public List<SevUser> getUserData() {
@@ -30,5 +34,9 @@ public class SevInspector {
 
     public LocalDateTime getLastUpdateTimestamp() {
         return sevUsersRepository.getLastUpdateTimestamp();
+    }
+
+    public boolean canGrabUserData() {
+        return updateTimeChecker.canUpdate();
     }
 }

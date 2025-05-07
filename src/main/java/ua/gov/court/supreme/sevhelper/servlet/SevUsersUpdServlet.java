@@ -16,6 +16,13 @@ public class SevUsersUpdServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("POST request received(SevUsersUpdServlet)");
+
+        if (!sevInspector.canGrabUserData()) {
+            req.getSession().setAttribute("error", "Updates are possible no more than once every 30 minutes.");
+            resp.sendRedirect(req.getContextPath());
+            return;
+        }
+
         try {
             sevInspector.grabUserData();
         } catch (Exception e) {

@@ -1,20 +1,20 @@
 package ua.gov.court.supreme.sevhelper.db;
 
-import java.io.IOException;
+import ua.gov.court.supreme.sevhelper.service.PropertiesLoader;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class PostgresConnector implements DatabaseConnector {
-    public static final Properties properties = new Properties();
+    public final PropertiesLoader propertiesLoader;
 
-    static {
+    public PostgresConnector() {
+        this.propertiesLoader = PropertiesLoader.getInstance();
+
         try {
             Class.forName("org.postgresql.Driver");
-            properties.load(PostgresConnector.class.getClassLoader()
-                    .getResourceAsStream("application.properties"));
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException("Failed to initialize Postgres DB connection", e);
         }
     }
@@ -22,9 +22,9 @@ public class PostgresConnector implements DatabaseConnector {
     @Override
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                properties.getProperty("postgres.db.url"),
-                properties.getProperty("postgres.db.user"),
-                properties.getProperty("postgres.db.password")
+                propertiesLoader.getPostgresUrl(),
+                propertiesLoader.getPostgresUser(),
+                propertiesLoader.getPostgresPassword()
         );
     }
 }

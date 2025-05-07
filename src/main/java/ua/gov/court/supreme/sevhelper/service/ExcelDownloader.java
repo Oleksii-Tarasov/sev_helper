@@ -5,10 +5,14 @@ import java.net.URL;
 import java.nio.file.Files;
 
 public class ExcelDownloader {
-    private static final String fileURL = "https://se.diia.gov.ua/uploads/documents/45.xlsx";
+    private final PropertiesLoader propertiesLoader;
 
-    public static File downloadFile() throws IOException {
-        URL url = new URL(fileURL);
+    public ExcelDownloader() {
+        this.propertiesLoader = PropertiesLoader.getInstance();
+    }
+
+    public File downloadFile() throws IOException {
+        URL url = new URL(propertiesLoader.getFileUrl());
         File sevUsersFile = Files.createTempFile("sev_users", ".xlsx").toFile();
 
         try (InputStream inputStream = url.openStream();

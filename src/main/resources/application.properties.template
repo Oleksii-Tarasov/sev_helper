@@ -16,3 +16,6 @@ postgres.db.password=sev_pass
 #* - кожного місяця
 #? - будь-який день тижня
 scheduler.cron.expression=0 15 7,13 * * ?
+
+# Source
+file.url=https://se.diia.gov.ua/uploads/documents/45.xlsx

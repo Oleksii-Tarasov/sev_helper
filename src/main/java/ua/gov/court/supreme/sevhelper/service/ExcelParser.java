@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,25 +14,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExcelParser {
-
-    private static final String tempFileURL = "C:\\development\\projects\\sev_helper\\src\\main\\resources\\sev_users.xlsx";
-
-//    public static List<String[]> parseExcel(File excelFile) throws IOException {
-    public static List<String[]> parseExcel() throws IOException {
+    public static List<String[]> parseExcel(File excelFile) throws IOException {
         List<String[]> parsedFile = new ArrayList<>();
-//        try (FileInputStream fileInputStream = new FileInputStream(excelFile);
-        try (FileInputStream fileInputStream = new FileInputStream(tempFileURL);
+        try (FileInputStream fileInputStream = new FileInputStream(excelFile);
              Workbook workbook = new XSSFWorkbook(fileInputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            // Пропускаємо перший рядок з заголовками
+            // Skip the first line with headings
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
 
-            // Обробляємо тільки існуючі рядки
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 String column1 = getCellValue(row.getCell(0));

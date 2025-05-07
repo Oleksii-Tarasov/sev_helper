@@ -3,8 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">--%>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <style>
         <%@include file="/css/page.css"%>
     </style>
@@ -12,11 +11,10 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary py-0 fixed-top">
-    <%--    <div class="container-fluid">--%>
     <div class="container-sm">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="">
             <img src="${pageContext.request.contextPath}/img/logo.jpg" alt="Logo" width="50" height="50"
-                 class="d-inline-block align-text-middle">
+                 class="d-inline-block align-text-middle" onclick="location.reload(); return false;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +32,7 @@
                         <li>
                             <form method="post" action="${pageContext.request.contextPath}/upd-users"
                                   style="margin: 0;">
-                                <button type="submit" class="dropdown-item">Примусове оновлення</button>
+                                <button type="submit" class="dropdown-item">Оновити список учасників</button>
                             </form>
                         </li>
                     </ul>
@@ -104,9 +102,9 @@
     }
 %>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<%--Зміна кольору рядка, якщо значення в стовпчиках "Так" або "Ні"--%>
+<script src="${pageContext.request.contextPath}/css/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/css/bootstrap.bundle.min.js"></script>
+<%--Change row color if values in columns are "Yes" or "No"--%>
 <script>
     $(document).ready(function () {
         $('.table tr:not(:first-child)').each(function () {
@@ -121,33 +119,33 @@
         });
     });
 </script>
-<%--WebSocket з'єднання--%>
+<%--WebSocket connection--%>
 <script>
     const ws = new WebSocket('ws://' + window.location.host + '${pageContext.request.contextPath}/websocket/dbupdate');
 
     ws.onmessage = function (event) {
         if (event.data === 'reload') {
-            console.log('Отримано сигнал про оновлення даних');
+            console.log('Data update signal received');
             location.reload();
         }
     };
 
     ws.onclose = function () {
-        // Спроба переконектитись через 5 секунд
+        // Trying to reconnect in 5 seconds
         setTimeout(function () {
-            console.log('WebSocket відєднався. Спроба переконектитись...');
+            console.log('WebSocket disconnected. Trying to reconnect...');
             location.reload();
         }, 5000);
     };
 </script>
-<%--Пошук--%>
+<%--Search--%>
 <script>
     $(document).ready(function () {
         const searchInput = $('#searchInput');
         let currentMatchIndex = -1;
         let matchedCells = [];
 
-        // Зберігаємо початковий стан рядків
+        // Preserve the initial state of the rows
         const rows = $('.table tr:not(:first-child)');
         const originalStates = [];
 
@@ -186,7 +184,7 @@
         function scrollToMatch(index) {
             if (matchedCells.length === 0) return;
 
-            // Забезпечуємо циклічність
+            // Ensure cyclical search
             if (index >= matchedCells.length) {
                 index = 0;
             } else if (index < 0) {
@@ -195,14 +193,14 @@
 
             currentMatchIndex = index;
 
-            // Видаляємо попередній активний клас з усіх комірок
+            // Remove the previous active class from all cells
             $('.cell-match-active').removeClass('cell-match-active');
 
-            // Додаємо активний клас поточній комірці
+            // Add an active class to the current cell
             const currentCell = matchedCells[currentMatchIndex];
             currentCell.addClass('cell-match-active');
 
-            // Прокручуємо до поточного співпадіння
+            // Scroll to the current match
             $('html, body').animate({
                 scrollTop: currentCell.offset().top - 100
             }, 500);
@@ -234,7 +232,7 @@
                 });
             });
 
-            // Показуємо кількість знайдених співпадінь
+            // Show the number of matches found
             if (matchedCells.length > 0) {
                 scrollToMatch(0);
             }
@@ -267,55 +265,55 @@
         }
     });
 </script>
-<%--Сортування--%>
+<%--Sort--%>
 <script>
-    $(document).ready(function() {
-        // Додаємо курсор-поінтер до заголовків колонок, що сортуються
+    $(document).ready(function () {
+        // Add a cursor pointer to the column headings being sorted
         $('th[data-sortable="true"]').css('cursor', 'pointer');
 
-        // Обробка кліку по заголовку
-        $('th[data-sortable="true"]').click(function() {
+        // Handling a click on the title
+        $('th[data-sortable="true"]').click(function () {
             const table = $(this).parents('table').eq(0);
             const rows = table.find('tr:gt(0)').toArray();
             const column = $(this).index();
             const ascending = $(this).hasClass('asc');
 
-            // Прибираємо клас сортування з інших колонок
+            // Removing the sort class from other columns
             $(this).siblings('th').removeClass('asc desc');
             $(this).toggleClass('asc desc');
 
-            // Сортування рядків
-            rows.sort(function(a, b) {
+            // Sorting rows
+            rows.sort(function (a, b) {
                 const A = $(a).find('td').eq(column).text().trim();
                 const B = $(b).find('td').eq(column).text().trim();
 
-                // Спеціальна логіка для колонок з "Так"/"Ні"
+                // Special logic for "Yes"/"No" columns
                 if (A === 'Так' && B === 'Ні') return ascending ? 1 : -1;
                 if (A === 'Ні' && B === 'Так') return ascending ? -1 : 1;
 
-                // Перевірка на число (для ЄДРПОУ)
+                // Number check (for EDRPOU)
                 if (!isNaN(A) && !isNaN(B)) {
                     return ascending ?
                         parseInt(A) - parseInt(B) :
                         parseInt(B) - parseInt(A);
                 }
 
-                // Звичайне текстове порівняння
+                // Plain text comparison
                 return ascending ?
                     A.localeCompare(B, 'uk') :
                     B.localeCompare(A, 'uk');
             });
 
-            // Видаляємо всі рядки крім заголовка і додаємо відсортовані
+            // Delete all rows except the header and add sorted ones
             table.find('tr:gt(0)').remove();
             table.append(rows);
 
-            // Оновлюємо нумерацію в першій колонці
-            table.find('tr:gt(0)').each(function(index) {
+            // Update the numbering in the first column
+            table.find('tr:gt(0)').each(function (index) {
                 $(this).find('td:first').text(index + 1);
             });
 
-            // Відновлюємо кольори рядків
+            // Restoring row colors
             applyRowColors();
         });
     });

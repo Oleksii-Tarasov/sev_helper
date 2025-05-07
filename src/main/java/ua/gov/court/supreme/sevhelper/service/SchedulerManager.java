@@ -4,21 +4,13 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import ua.gov.court.supreme.sevhelper.job.DataGrabJob;
 
-import java.util.Properties;
-
 public class SchedulerManager {
     private final Scheduler scheduler;
-    private final Properties properties;
+    private final PropertiesLoader propertiesLoader;
 
     public SchedulerManager() throws SchedulerException {
         this.scheduler = StdSchedulerFactory.getDefaultScheduler();
-        this.properties = new Properties();
-
-        try {
-            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
-        } catch (Exception e) {
-            throw new RuntimeException("Не вдалося завантажити файл конфігурації", e);
-        }
+        this.propertiesLoader = PropertiesLoader.getInstance();
     }
 
     public void startDailyDataGrabScheduler(SevInspector sevInspector) throws SchedulerException {
@@ -28,7 +20,7 @@ public class SchedulerManager {
 
         updateDataJob.getJobDataMap().put("sevInspector", sevInspector);
 
-        String dbUpdateSchedule = properties.getProperty("scheduler.cron.expression", "0 15 7,13 * * ?");
+        String dbUpdateSchedule = propertiesLoader.getSchedulerCronExpression();
 
         Trigger dailyTrigger = TriggerBuilder.newTrigger()
                 .withIdentity("dataGrabTrigger", "scheduledTasks")
