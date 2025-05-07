@@ -28,7 +28,7 @@
                         Довідник СЕВ ОВВ
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Довідка</a></li>
+                        <li><a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#helpModal">Довідка</a></li>
                         <li>
                             <form method="post" action="${pageContext.request.contextPath}/upd-users"
                                   style="margin: 0;">
@@ -101,6 +101,37 @@
 <%
     }
 %>
+
+<!-- Modal help window -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <h5 class="fw-bold mb-4">Опції «Довідника СЕВ ОВВ»:</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-3">• Щоденне автоматизоване оновлення з порталу Дія (о 07:15 та 13:15) списку учасників СЕВ ОВВ та перевірка їх статусу підключення</li>
+                    <li class="mb-4">• Ручне оновлення списку учасників СЕВ ОВВ за потреби, але не частіше ніж раз на 30 хвилин</li>
+                </ul>
+
+                <h5 class="fw-bold mb-3">Позначення кольорів:</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-3 p-2" style="background-color: #90EE90">
+                        організація налаштована до взаємодії через АС ДокПроф
+                    </li>
+                    <li class="mb-3 p-2" style="background-color: #FFB6C1">
+                        участь організації в СЕВ ОВВ на даний момент припинена
+                    </li>
+                    <li class="mb-3 p-2" style="background-color: #FFFF00">
+                        збіги пошукових запитів із записами в таблиці
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="${pageContext.request.contextPath}/css/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/css/bootstrap.bundle.min.js"></script>
