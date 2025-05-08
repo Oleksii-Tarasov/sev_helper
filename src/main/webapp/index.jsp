@@ -30,9 +30,15 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#helpModal">Довідка</a></li>
                         <li>
+                            <form action=""
+                                  style="margin: 0;">
+                                <button type="submit" class="dropdown-item">Оновити дані з файлу</button>
+                            </form>
+                        </li>
+                        <li>
                             <form method="post" action="${pageContext.request.contextPath}/upd-users"
                                   style="margin: 0;">
-                                <button type="submit" class="dropdown-item">Оновити список учасників</button>
+                                <button type="submit" class="dropdown-item">Оновити дані з порталу "Дія"</button>
                             </form>
                         </li>
                     </ul>
@@ -44,7 +50,7 @@
         <form class="d-flex" role="search" onsubmit="return false;">
             <input class="form-control me-2" type="search" id="searchInput" placeholder="Назва організації/ЄДРПОУ"
                    aria-label="Search">
-            <button class="btn btn-outline-success" type="submit" onclick="performSearch()">Пошук</button>
+            <button class="btn btn-outline-success" type="submit" onclick="globalHandleSearchClick()">Пошук</button>
         </form>
     </div>
 </nav>
@@ -171,6 +177,8 @@
 </script>
 <%--Search--%>
 <script>
+    let globalHandleSearchClick;
+
     $(document).ready(function () {
         const searchInput = $('#searchInput');
         let currentMatchIndex = -1;
@@ -233,8 +241,8 @@
 
             // Scroll to the current match
             $('html, body').animate({
-                scrollTop: currentCell.offset().top - 100
-            }, 500);
+                scrollTop: currentCell.offset().top - 300
+            }, 250);
         }
 
         function performSearch() {
@@ -294,6 +302,22 @@
                 }, wait);
             };
         }
+
+        // Search Button
+        globalHandleSearchClick = function() {
+            if (matchedCells.length > 0) {
+                scrollToMatch(currentMatchIndex + 1);
+            } else {
+                performSearch();
+            }
+        }
+
+        //Autoscroll to top if the search input is empty
+        searchInput.on('search', function() {
+            if (this.value === '') {
+                $('html, body').animate({ scrollTop: 0 }, 250);
+            }
+        });
     });
 </script>
 <%--Sort--%>
