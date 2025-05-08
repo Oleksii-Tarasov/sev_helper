@@ -30,9 +30,14 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#helpModal">Довідка</a></li>
                         <li>
-                            <form action=""
-                                  style="margin: 0;">
-                                <button type="submit" class="dropdown-item">Оновити дані з файлу</button>
+                            <form action="${pageContext.request.contextPath}/upload-file" method="post"
+                                  enctype="multipart/form-data" style="margin: 0;">
+                                <input type="file" id="file" name="file" accept=".xlsx" style="display: none;"
+                                       onchange="this.form.submit();">
+                                <button type="button" class="dropdown-item"
+                                        onclick="document.getElementById('file').click();">
+                                    Оновити дані з файлу
+                                </button>
                             </form>
                         </li>
                         <li>
@@ -119,7 +124,7 @@
                 <h5 class="fw-bold mb-4">Опції «Довідника СЕВ ОВВ»:</h5>
                 <ul class="list-unstyled">
                     <li class="mb-3">• Щоденне автоматизоване оновлення з порталу Дія (о 07:15 та 13:15) списку учасників СЕВ ОВВ та перевірка їх статусу підключення</li>
-                    <li class="mb-4">• Ручне оновлення списку учасників СЕВ ОВВ за потреби, але не частіше ніж раз на 30 хвилин</li>
+                    <li class="mb-4">• Примусове оновлення списку учасників СЕВ ОВВ з порталу Дія (не частіше ніж раз на 30 хвилин)</li>
                 </ul>
 
                 <h5 class="fw-bold mb-3">Позначення кольорів:</h5>

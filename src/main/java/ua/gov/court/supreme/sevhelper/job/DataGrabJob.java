@@ -16,7 +16,7 @@ public class DataGrabJob implements Job {
             JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
             SevInspector sevInspector = (SevInspector) jobDataMap.get("sevInspector");
 
-            sevInspector.grabUserData();
+            sevInspector.grabUserDataFromUrl();
             System.out.println("SEV data updated: " + LocalDateTime.now());
 
             // Notification to all clients about the update

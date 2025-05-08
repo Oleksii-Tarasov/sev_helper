@@ -1,21 +1,16 @@
 package ua.gov.court.supreme.sevhelper.servlet;
 
-import ua.gov.court.supreme.sevhelper.service.SevInspector;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/upd-users")
-public class SevUsersUpdServlet extends HttpServlet {
-    private final SevInspector sevInspector = new SevInspector();
-
+public class SevUsersFromUrlUpdServlet extends BaseSevServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("POST request received(SevUsersUpdServlet)");
+        System.out.println("POST request received(SevUsersFromUrlUpdServlet)");
 
         if (!sevInspector.canGrabUserData()) {
             req.getSession().setAttribute("error", "Updates are possible no more than once every 30 minutes.");
@@ -24,7 +19,7 @@ public class SevUsersUpdServlet extends HttpServlet {
         }
 
         try {
-            sevInspector.grabUserData();
+            sevInspector.grabUserDataFromUrl();
         } catch (Exception e) {
             req.setAttribute("error", "Can`t find users " + e.getMessage());
         }
