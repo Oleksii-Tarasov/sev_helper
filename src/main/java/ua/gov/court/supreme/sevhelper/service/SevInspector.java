@@ -23,6 +23,8 @@ public class SevInspector {
     public void grabUserDataFromUrl() throws IOException {
         List<String[]> sevUsers = ExcelParser.parseExcel(excelDownloader.downloadFile());
 
+        if (sevUsers.isEmpty()) {return;}
+
         sevUsersRepository.dropData();
         sevUsersRepository.saveSevUsersToDB(sevUsers);
         sevUsersRepository.saveDocFlowUsersToDB();
@@ -37,6 +39,8 @@ public class SevInspector {
         filePart.write(tempFile.getAbsolutePath());
         List<String[]> sevUsers = ExcelParser.parseExcel(tempFile);
         tempFile.delete();
+
+        if (sevUsers.isEmpty()) {return;}
 
         sevUsersRepository.dropData();
         sevUsersRepository.saveSevUsersToDB(sevUsers);

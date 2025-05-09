@@ -21,6 +21,13 @@ public class SevUsersFromFileUpdServlet extends BaseSevServlet {
 
         Part filePart = req.getPart("file");
 
+        // Checking if the file was sent
+        if (filePart == null || filePart.getSize() == 0) {
+            req.setAttribute("error", "Файл не було завантажено");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
+        }
+
         try {
             sevInspector.grabUserDataFromFile(filePart);
         } catch (Exception e) {

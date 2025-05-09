@@ -22,23 +22,38 @@ public class ExcelParser {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            // Skip the first line with headings
-            if (rowIterator.hasNext()) {
-                rowIterator.next();
-            }
+            if (rowIterator.hasNext() && isValidFileStructure(rowIterator)) {
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    String column1 = getCellValue(row.getCell(0));
+                    String column2 = getCellValue(row.getCell(1));
+                    String column3 = getCellValue(row.getCell(2));
+                    String column4 = getCellValue(row.getCell(5));
 
-            while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
-                String column1 = getCellValue(row.getCell(0));
-                String column2 = getCellValue(row.getCell(1));
-                String column3 = getCellValue(row.getCell(2));
-                String column4 = getCellValue(row.getCell(5));
-
-                parsedFile.add(new String[]{column1, column2, column3, column4});
+                    parsedFile.add(new String[]{column1, column2, column3, column4});
+                }
             }
         }
 
         return parsedFile;
+    }
+
+    private static boolean isValidFileStructure(Iterator<Row> rowIterator) {
+        Row headerRow = rowIterator.next();
+
+        List<String> expectedHeaders = new ArrayList<>();
+        expectedHeaders.add("ЄДРПОУ");
+        expectedHeaders.add("Скорочене найменування");
+        expectedHeaders.add("Повне найменування");
+        expectedHeaders.add("Припинено");
+
+        List<String> columnHeaders = new ArrayList<>();
+        columnHeaders.add(getCellValue(headerRow.getCell(0)));
+        columnHeaders.add(getCellValue(headerRow.getCell(1)));
+        columnHeaders.add(getCellValue(headerRow.getCell(2)));
+        columnHeaders.add(getCellValue(headerRow.getCell(5)));
+
+        return expectedHeaders.containsAll(columnHeaders);
     }
 
     private static String getCellValue(Cell cell) {
