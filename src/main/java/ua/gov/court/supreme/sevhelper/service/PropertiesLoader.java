@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.sevhelper.service;
 
+import ua.gov.court.supreme.sevhelper.exception.FileProcessingException;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -10,9 +12,8 @@ public class PropertiesLoader {
     public PropertiesLoader() {
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
-
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load configuration file.", e);
+            throw new FileProcessingException("Failed to load configuration file.", e);
         }
     }
 

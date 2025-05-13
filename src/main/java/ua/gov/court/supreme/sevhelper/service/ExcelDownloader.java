@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.sevhelper.service;
 
+import ua.gov.court.supreme.sevhelper.exception.FileProcessingException;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
@@ -22,6 +24,8 @@ public class ExcelDownloader {
             while ((length = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, length);
             }
+        } catch (IOException e) {
+            throw new FileProcessingException("Can`t download file from URL: " + url, e);
         }
 
         return sevUsersFile;

@@ -2,6 +2,8 @@ body {
     padding-top: 50px;
 }
 
+/*Table*/
+
 .table td, .table th {
     white-space: normal;
     overflow: hidden;
@@ -9,11 +11,11 @@ body {
 }
 
 .table th {
-    text-align: center;  /* центруємо всі заголовки */
+    text-align: center;
     vertical-align: middle;
 }
 
-.table > :not(caption) > * > * {  /* Зменшення відстані тексту до границь рядка по вертикалі */
+.table > :not(caption) > * > * {
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
 }
@@ -52,7 +54,7 @@ body {
     text-align: center;
 }
 
-/*Header*/
+/*Header-Navbar*/
 
 .navbar {
     background-color: #00264d !important;
@@ -61,10 +63,10 @@ body {
 .navbar h6 {
     color: white !important;
     margin: 0 !important;
-    display: flex !important; /* для вертикального центрування */
-    align-items: center !important; /* вертикальне центрування */
+    display: flex !important;
+    align-items: center !important;
     height: 100% !important;
-    padding: 0 15px !important; /* додаємо горизонтальні відступи */
+    padding: 0 15px !important;
 }
 
 .navbar-brand {
@@ -80,7 +82,6 @@ body {
 
 .container-fluid {
     padding-left: 1px !important;
-    /*margin: 5px !important;*/
 }
 
 .navbar .d-flex {
@@ -91,7 +92,7 @@ body {
 
 .navbar .form-control {
     min-width: 300px;
-    width: 25vw; /* займає 25% ширини вікна */
+    width: 25vw; /* takes up 25% of the window width */
 }
 
 .navbar .form-control:focus {
@@ -137,8 +138,8 @@ body {
 }
 
 .cell-match-active {
-    background-color: #FFFF00 !important; /* колір для активного співпадіння */
-    outline: 2px solid #FFA500 !important; /* Додаткове виділення контуром */
+    background-color: #FFFF00 !important;
+    outline: 2px solid #FFA500 !important;
 }
 
 /*Drop-down menu*/

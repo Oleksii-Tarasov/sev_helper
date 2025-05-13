@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.sevhelper.servlet;
 
+import ua.gov.court.supreme.sevhelper.exception.BusinessException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +26,10 @@ public class SevUsersListServlet extends BaseSevServlet {
             }
 
             req.setAttribute("lastUpdateTimestamp", sevInspector.getLastUpdateTimestamp());
+        } catch (BusinessException e) {
+            req.setAttribute("error", "Помилка отримання даних: " + e.getMessage());
         } catch (Exception e) {
-            req.setAttribute("error", "Can`t find users " + e.getMessage());
+            req.setAttribute("error", "Виникла неочікувана помилка: " + e.getMessage());
         }
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);

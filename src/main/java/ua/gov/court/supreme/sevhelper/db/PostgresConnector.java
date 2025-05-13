@@ -1,5 +1,6 @@
 package ua.gov.court.supreme.sevhelper.db;
 
+import ua.gov.court.supreme.sevhelper.exception.DatabaseException;
 import ua.gov.court.supreme.sevhelper.service.PropertiesLoader;
 
 import java.sql.Connection;
@@ -15,7 +16,7 @@ public class PostgresConnector implements DatabaseConnector {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to initialize Postgres DB connection", e);
+            throw new DatabaseException("Failed to initialize Postgres DB connection", e);
         }
     }
 

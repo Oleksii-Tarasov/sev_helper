@@ -1,5 +1,6 @@
 package ua.gov.court.supreme.sevhelper.db;
 
+import ua.gov.court.supreme.sevhelper.exception.DatabaseException;
 import ua.gov.court.supreme.sevhelper.service.PropertiesLoader;
 
 import java.sql.Connection;
@@ -11,13 +12,11 @@ public class OracleConnector implements DatabaseConnector {
 
     public OracleConnector() {
         this.propertiesLoader = PropertiesLoader.getInstance();
-    }
 
-    static {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to initialize Oracle DB connection", e);
+            throw new DatabaseException("Failed to initialize Oracle DB connection", e);
         }
     }
 

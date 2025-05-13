@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ua.gov.court.supreme.sevhelper.exception.FileProcessingException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExcelParser {
-    public static List<String[]> parseExcel(File excelFile) throws IOException {
+    public static List<String[]> parseExcel(File excelFile) {
         List<String[]> parsedFile = new ArrayList<>();
         try (FileInputStream fileInputStream = new FileInputStream(excelFile);
              Workbook workbook = new XSSFWorkbook(fileInputStream)) {
@@ -33,6 +34,8 @@ public class ExcelParser {
                     parsedFile.add(new String[]{column1, column2, column3, column4});
                 }
             }
+        } catch (IOException e) {
+            throw new FileProcessingException("Can`t parse Excel file", e);
         }
 
         return parsedFile;

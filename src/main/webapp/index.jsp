@@ -7,7 +7,7 @@
 <head>
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        <%@include file="/css/page.css"%>
+        <%@include file="/css/style.css"%>
     </style>
     <title>Довідник СЕВ ОВВ</title>
 </head>
@@ -94,7 +94,6 @@
         </div>
     </div>
 </c:if>
-
 
 <!-- Modal help window -->
 <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">

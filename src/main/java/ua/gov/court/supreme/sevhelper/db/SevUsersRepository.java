@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.sevhelper.db;
 
+import ua.gov.court.supreme.sevhelper.exception.DataAccessException;
+import ua.gov.court.supreme.sevhelper.exception.DatabaseException;
 import ua.gov.court.supreme.sevhelper.model.SevUser;
 
 import java.sql.Connection;
@@ -15,8 +17,12 @@ public class SevUsersRepository {
     private final DatabaseConnector oracleConnector;
 
     public SevUsersRepository() {
-        this.postgresConnector = new PostgresConnector();
-        this.oracleConnector = new OracleConnector();
+        try {
+            this.postgresConnector = new PostgresConnector();
+            this.oracleConnector = new OracleConnector();
+        } catch (DatabaseException e) {
+            throw new DataAccessException("Failed to initialize DB connectors", e);
+        }
     }
 
     public void saveSevUsersToDB(List<String[]> sevUsers) {
@@ -43,8 +49,7 @@ public class SevUsersRepository {
             statement.executeBatch();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Помилка при збереженні користувачів СЕВ", e);
+            throw new DataAccessException("Error saving SEV users to Postgres database", e);
         }
     }
 
@@ -68,8 +73,7 @@ public class SevUsersRepository {
             statement.executeBatch();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Помилка при збереженні користувачів DocFlow", e);
+            throw new DataAccessException("Error saving DocFlow users to Postgres database", e);
         }
     }
 
@@ -98,9 +102,7 @@ public class SevUsersRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Помилка при отриманні користувачів DocFlow", e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException("Error retrieving DocFlow users from Oracle database", e);
         }
 
         return docFlowSevUsers;
@@ -121,8 +123,7 @@ public class SevUsersRepository {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Помилка при оновленні статусу підключення користувачів до СЕВ");
+            throw new DataAccessException("Error updating SEV users connection status to Postgres database", e);
         }
     }
 
@@ -145,8 +146,7 @@ public class SevUsersRepository {
                 ));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Помилка при отриманні даних користувачів СЕВ");
+            throw new DataAccessException("Error receiving SEV user data from Postgres database", e);
         }
 
         return sevUsers;
@@ -156,11 +156,11 @@ public class SevUsersRepository {
         String query = "INSERT INTO update_timestamps (last_update) VALUES (CURRENT_TIMESTAMP)";
 
         try (Connection connection = postgresConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)){
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Не вдалося оновити timestamp", e);
+            throw new DataAccessException("Error updating timestamp", e);
         }
     }
 
@@ -168,15 +168,15 @@ public class SevUsersRepository {
         String query = "SELECT last_update FROM update_timestamps ORDER BY last_update DESC LIMIT 1";
 
         try (Connection connection = postgresConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
             if (resultSet.next()) {
                 return resultSet.getTimestamp("last_update").toLocalDateTime();
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException("Failed to get last update timestamp from Postgres database", e);
         }
     }
 
@@ -186,8 +186,7 @@ public class SevUsersRepository {
         try (Connection connection = postgresConnector.getConnection()) {
             connection.prepareStatement(query).execute();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Помилка при знищенні даних", e);
+            throw new DataAccessException("Error deleting data from Postgres database", e);
         }
     }
 }

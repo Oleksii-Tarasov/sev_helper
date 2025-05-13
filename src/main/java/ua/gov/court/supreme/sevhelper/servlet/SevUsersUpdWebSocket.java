@@ -5,6 +5,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -23,12 +24,27 @@ public class SevUsersUpdWebSocket {
     }
 
     public static void notifyClients() {
+        Set<Session> invalidSessions = new HashSet<>();
+
         for (Session session : sessions) {
             try {
-                session.getBasicRemote().sendText("reload");
+                if (session.isOpen()) {
+                    session.getBasicRemote().sendText("reload");
+                } else {
+                    // The session is closed but remains on the list
+                    invalidSessions.add(session);
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                // Error while sending, most likely invalid session
+                System.err.println("Error sending message to client: " + e.getMessage());
+                invalidSessions.add(session);
             }
+        }
+
+        // Removing invalid sessions
+        if (!invalidSessions.isEmpty()) {
+            sessions.removeAll(invalidSessions);
+            System.out.println("Deleted " + invalidSessions.size() + " invalid WebSocket sessions");
         }
     }
 }
