@@ -43,6 +43,7 @@ public class ExcelParser {
 
         List<String> expectedHeaders = new ArrayList<>();
         expectedHeaders.add("ЄДРПОУ");
+        expectedHeaders.add("ЕДРПОУ");
         expectedHeaders.add("Скорочене найменування");
         expectedHeaders.add("Повне найменування");
         expectedHeaders.add("Припинено");
