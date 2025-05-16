@@ -15,7 +15,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExcelParser {
-    public static List<String[]> parseExcel(File excelFile) {
+    private final PropertiesLoader propertiesLoader;
+
+    public ExcelParser() {
+        this.propertiesLoader = PropertiesLoader.getInstance();
+    }
+
+    public List<String[]> parseExcel(File excelFile) {
         List<String[]> parsedFile = new ArrayList<>();
         try (FileInputStream fileInputStream = new FileInputStream(excelFile);
              Workbook workbook = new XSSFWorkbook(fileInputStream)) {
@@ -41,15 +47,10 @@ public class ExcelParser {
         return parsedFile;
     }
 
-    private static boolean isValidFileStructure(Iterator<Row> rowIterator) {
+    private boolean isValidFileStructure(Iterator<Row> rowIterator) {
         Row headerRow = rowIterator.next();
 
-        List<String> expectedHeaders = new ArrayList<>();
-        expectedHeaders.add("ЄДРПОУ");
-        expectedHeaders.add("ЕДРПОУ");
-        expectedHeaders.add("Скорочене найменування");
-        expectedHeaders.add("Повне найменування");
-        expectedHeaders.add("Припинено");
+        List<String> expectedHeaders = propertiesLoader.getExpectedExcelHeaders();
 
         List<String> columnHeaders = new ArrayList<>();
         columnHeaders.add(getCellValue(headerRow.getCell(0)));

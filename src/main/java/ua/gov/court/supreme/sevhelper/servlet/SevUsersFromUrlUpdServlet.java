@@ -12,7 +12,6 @@ public class SevUsersFromUrlUpdServlet extends BaseSevServlet {
         System.out.println("POST request received(SevUsersFromUrlUpdServlet)");
 
         if (!sevInspector.canGrabUserData()) {
-            req.getSession().setAttribute("error", "Updates are possible no more than once every 30 minutes.");
             resp.sendRedirect(req.getContextPath());
             return;
         }

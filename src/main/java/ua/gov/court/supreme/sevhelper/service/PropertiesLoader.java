@@ -3,6 +3,9 @@ package ua.gov.court.supreme.sevhelper.service;
 import ua.gov.court.supreme.sevhelper.exception.FileProcessingException;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 public class PropertiesLoader {
@@ -61,5 +64,15 @@ public class PropertiesLoader {
 
     public String getSchedulerCronExpression() {
         return getProperty("scheduler.cron.expression");
+    }
+
+    public List<String> getExpectedExcelHeaders() {
+        String headersFromProperties = getProperty("excel.headers");
+
+        if (headersFromProperties == null || headersFromProperties.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(headersFromProperties.split(","));
     }
 }

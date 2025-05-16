@@ -14,6 +14,7 @@ import java.util.List;
 
 public class SevInspector {
     private final ExcelDownloader excelDownloader;
+    private final ExcelParser excelParser;
     private final SevUsersRepository sevUsersRepository;
     private final UpdateTimeChecker updateTimeChecker;
 
@@ -21,11 +22,12 @@ public class SevInspector {
         this.sevUsersRepository = new SevUsersRepository();
         this.updateTimeChecker = new UpdateTimeChecker();
         this.excelDownloader = new ExcelDownloader();
+        this.excelParser = new ExcelParser();
     }
 
     public void grabUserDataFromUrl() throws IOException {
         try {
-            List<String[]> sevUsers = ExcelParser.parseExcel(excelDownloader.downloadFile());
+            List<String[]> sevUsers = excelParser.parseExcel(excelDownloader.downloadFile());
 
             if (sevUsers.isEmpty()) {
                 return;
@@ -38,7 +40,7 @@ public class SevInspector {
             sevUsersRepository.updateTimestamp();
             updateTimeChecker.updateLastUpdateTime();
         } catch (DataAccessException | FileProcessingException e) {
-            throw new BusinessException("Can`t garb users data (from url)", e);
+            throw new BusinessException("Can`t garb users data (from url): " + e.getMessage(), e);
         }
     }
 
@@ -47,7 +49,7 @@ public class SevInspector {
             String fileExtension = filePart.getSubmittedFileName();
             File tempFile = File.createTempFile("upload", fileExtension);
             filePart.write(tempFile.getAbsolutePath());
-            List<String[]> sevUsers = ExcelParser.parseExcel(tempFile);
+            List<String[]> sevUsers = excelParser.parseExcel(tempFile);
             tempFile.delete();
 
             if (sevUsers.isEmpty()) {
@@ -59,7 +61,7 @@ public class SevInspector {
             sevUsersRepository.saveDocFlowUsersToDB();
             sevUsersRepository.markUsersConnectedToSev();
         } catch (DataAccessException | FileProcessingException e) {
-            throw new BusinessException("Can`t grab users data (from file)", e);
+            throw new BusinessException("Can`t grab users data (from file): " + e.getMessage(), e);
         }
     }
 
@@ -67,7 +69,7 @@ public class SevInspector {
         try {
             return sevUsersRepository.getAllData();
         } catch (DataAccessException e) {
-            throw new BusinessException("Can`t get users data from database", e);
+            throw new BusinessException("Can`t get users data from database: " + e.getMessage(), e);
         }
     }
 
@@ -75,7 +77,7 @@ public class SevInspector {
         try {
             return sevUsersRepository.getLastUpdateTimestamp();
         } catch (DataAccessException e) {
-            throw new BusinessException("Can`t get last update timestamp from database", e);
+            throw new BusinessException("Can`t get last update timestamp from database: " + e.getMessage(), e);
         }
     }
 
@@ -83,7 +85,7 @@ public class SevInspector {
         try {
             return updateTimeChecker.canUpdate();
         } catch (DataAccessException e) {
-            throw new BusinessException("Can`t check last update timestamp from database", e);
+            throw new BusinessException("Can`t check last update timestamp from database: " + e.getMessage(), e);
         }
     }
 }

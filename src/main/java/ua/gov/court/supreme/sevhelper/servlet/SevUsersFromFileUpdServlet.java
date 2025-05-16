@@ -31,7 +31,7 @@ public class SevUsersFromFileUpdServlet extends BaseSevServlet {
         try {
             sevInspector.grabUserDataFromFile(filePart);
         } catch (Exception e) {
-            req.setAttribute("error", "Can`t parse file " + e.getMessage());
+            req.setAttribute("error", "Неможливо обробити файл: " + e.getMessage());
         }
 
         resp.sendRedirect(req.getContextPath());

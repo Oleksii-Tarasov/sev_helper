@@ -19,3 +19,6 @@ scheduler.cron.expression=0 15 7,13 * * ?
 
 # Source
 file.url=https://se.diia.gov.ua/uploads/documents/45.xlsx
+
+# Excel file expected headers
+excel.headers=ЄДРПОУ,ЕДРПОУ,Скорочене найменування,Повне найменування,Припинено
